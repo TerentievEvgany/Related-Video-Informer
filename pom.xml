@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.videoinformer</groupId>
+    <artifactId>relatedVideoInformer</artifactId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+    <name>relatedVideoInformer</name>
+    <modules>
+        <module>fakeConnector</module>
+        <module>clipInformer</module>
+        <module>youtubeConnector</module>
+    </modules>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
+        <inceptionYear>2013</inceptionYear>
+        <copyrightOwner>Evgany Terentiev</copyrightOwner>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <packageName>org.videoinformer</packageName>	
+                            <mainClass>org.videoinformer.VideoInformer</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        <plugin>
+            <groupId>org.codehaus.groovy.maven</groupId>
+            <artifactId>gmaven-plugin</artifactId>
+            <version>1.0</version>
+            <executions>
+                <execution>
+                    <phase>validate</phase>
+                    <goals>
+                        <goal>execute</goal>
+                    </goals>
+                    <configuration>
+                        <source>
+                            import java.util.Date
+                            import java.text.MessageFormat
+                            def vartimestamp = MessageFormat.format("{0,date,yyyy}", new Date())
+                            project.properties['currentYear'] = vartimestamp
+                        </source>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+        <!-- Adding header to file -->
+        <plugin>
+            <groupId>com.mycila.maven-license-plugin</groupId>
+            <artifactId>maven-license-plugin</artifactId>
+            <version>1.8.0</version>
+            <configuration>
+                <!-- Template location -->
+                <header>${basedir}/fileHeader.txt</header>
+                <properties>
+                    <!-- Values to be substituted in template -->
+                    <h_inceptionYear>${inceptionYear}</h_inceptionYear>
+                    <h_currentYear>${currentYear}</h_currentYear>
+                    <h_copyrightOwner>${copyrightOwner}</h_copyrightOwner>
+                </properties>
+                <strictCheck>true</strictCheck>
+                <excludes>
+                    <exclude>**/*.html</exclude>
+                    <exclude>**/*.xml</exclude>
+                    <exclude>**/*.txt</exclude>
+                    <exclude>**/*.ec</exclude>
+                    <exclude>**/*.log</exclude>
+                    <exclude>**/*.css</exclude>
+                    <exclude>**/*.js</exclude>
+                    <exclude>**/*.jsp</exclude>
+                    <exclude>**/*.md</exclude>
+                </excludes>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>id.validate</id>
+                    <phase>validate</phase>
+                    <goals>
+                        <goal>format</goal>
+                    </goals>                       
+                </execution>
+                <execution>
+                    <id>id.verify</id>
+                    <phase>validate</phase>
+                    <goals>
+                        <goal>check</goal>
+                    </goals>
+                </execution>                   
+            </executions>                
+        </plugin>
+        </plugins>  
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.htmlcleaner</groupId>
+            <artifactId>htmlcleaner</artifactId>
+            <version>2.2</version>
+        </dependency>     
+    </dependencies>
+</project>
